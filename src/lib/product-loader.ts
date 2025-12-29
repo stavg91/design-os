@@ -60,15 +60,15 @@ export function parseProductOverview(md: string): ProductOverview | null {
     const name = nameMatch?.[1]?.trim() || 'Product Overview'
 
     // Extract description - content between ## Description and next ##
-    const descMatch = md.match(/## Description\s*\n+([\s\S]*?)(?=\n## |\n#[^#]|$)/)
+    const descMatch = md.match(/## Description\s*\r?\n([\s\S]*?)(?=\r?\n## |\r?\n#[^#]|$)/)
     const description = descMatch?.[1]?.trim() || ''
 
     // Extract problems - ### Problem N: Title pattern
-    const problemsSection = md.match(/## Problems & Solutions\s*\n+([\s\S]*?)(?=\n## |\n#[^#]|$)/)
+    const problemsSection = md.match(/## Problems & Solutions\s*\r?\n([\s\S]*?)(?=\r?\n## |\r?\n#[^#]|$)/)
     const problems: Problem[] = []
 
     if (problemsSection?.[1]) {
-      const problemMatches = [...problemsSection[1].matchAll(/### Problem \d+:\s*(.+)\n+([\s\S]*?)(?=\n### |\n## |$)/g)]
+      const problemMatches = [...problemsSection[1].matchAll(/### Problem \d+:\s*(.+)\r?\n([\s\S]*?)(?=\r?\n### |\r?\n## |$)/g)]
       for (const match of problemMatches) {
         problems.push({
           title: match[1].trim(),
@@ -78,7 +78,7 @@ export function parseProductOverview(md: string): ProductOverview | null {
     }
 
     // Extract features - bullet list after ## Key Features
-    const featuresSection = md.match(/## Key Features\s*\n+([\s\S]*?)(?=\n## |\n#[^#]|$)/)
+    const featuresSection = md.match(/## Key Features\s*\r?\n([\s\S]*?)(?=\r?\n## |\r?\n#[^#]|$)/)
     const features: string[] = []
 
     if (featuresSection?.[1]) {
@@ -123,7 +123,7 @@ export function parseProductRoadmap(md: string): ProductRoadmap | null {
     const sections: Section[] = []
 
     // Match sections with pattern ### N. Title
-    const sectionMatches = [...md.matchAll(/### (\d+)\.\s*(.+)\n+([\s\S]*?)(?=\n### |\n## |\n#[^#]|$)/g)]
+    const sectionMatches = [...md.matchAll(/### (\d+)\.\s*(.+)\r?\n([\s\S]*?)(?=\r?\n### |\r?\n## |\r?\n#[^#]|$)/g)]
 
     for (const match of sectionMatches) {
       const order = parseInt(match[1], 10)
